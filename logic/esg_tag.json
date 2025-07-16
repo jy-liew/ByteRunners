@@ -1,0 +1,20 @@
+{
+  "Fast Fashion": "High Impact",
+  "Luxury Goods": "High Impact",
+  "Air Travel": "High Impact",
+  "Oil & Gas": "High Impact",
+  "Online Gambling": "High Impact",
+  "Ride-hailing": "Medium Impact",
+  "Food Delivery": "Medium Impact",
+  "Electronics": "Medium Impact",
+  "Online Groceries": "Low Impact",
+  "Local Farmers Market": "Low Impact",
+  "Public Transport": "Low Impact",
+  "Green Retailer": "Low Impact",
+  "E-Wallet Topup": "Neutral",
+  "Bill Payment": "Neutral",
+  "Donation to NGO": "Positive Impact",
+  "Renewable Energy Provider": "Positive Impact",
+  "Eco Store": "Positive Impact"
+}
+
