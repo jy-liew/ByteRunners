@@ -18,4 +18,3 @@ def get_donation_message(esg_tag, donate):
     if donate:
         return "✅ Thank you! RM0.50 will be donated to the Red Cross."
     return None
-
