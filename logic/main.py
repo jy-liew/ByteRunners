@@ -32,8 +32,7 @@ if "transaction" not in st.session_state:
 if "donation_history" not in st.session_state:
     st.session_state.donation_history = []
 
-
-# 🔄 Randomly choose one transaction
+# Randomly choose one transaction
 transaction = st.session_state.transaction
 merchant_name = transaction["recipient"]
 category = get_merchant_category(merchant_name)
@@ -84,7 +83,6 @@ if not st.session_state.donated:
     if st.button("✅ Donate Now"):
         if st.session_state.selected_amount > 0:
             st.session_state.total_donation += st.session_state.selected_amount
-            
             # Save donation entry to history
             st.session_state.donation_history.append({
                 "Sender": transaction["sender"],
@@ -111,8 +109,6 @@ else:
     st.button("✅ Donate Now", disabled=True)
     st.success(f"🎉 Thank you! RM{st.session_state.selected_amount:.2f} has been donated to the Red Cross.")
 
-
-
 # ---- ESG Message Panel ----
 if esg_tag == "Positive Impact":
     st.success("🌟 Great! This merchant supports sustainability.")
@@ -125,7 +121,7 @@ elif esg_tag in ["High Impact", "Medium Impact"]:
 else:
     st.warning("⚠️ ESG info not available for this merchant.")
 
-# ---- Donation Summary ----
+# ---- donation Summary ----
 st.markdown("""
     <div style='font-size: 20px; font-weight: 600; margin-top: 2rem;'>💰 Total Donations Contributed</div>
 """, unsafe_allow_html=True)
@@ -147,8 +143,6 @@ with st.expander("💾 View All Past Donations", expanded=False):
         )
     else:
         st.info("No donations recorded yet.")
-
-
 
 # ---- Refresh Button ----
 if st.button("🔁 Generate New Transaction"):
