@@ -1,0 +1,159 @@
+/* SafeTap Custom Admin Stylesheet */
+
+/* Base Styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(145deg, #f0f4f8, #ffffff);
+  color: #1d3557;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h5, label {
+  color: #1d3557;
+  font-weight: 600;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0077b6, #023e8a);
+}
+
+.sidebar .sidebar-heading {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.sidebar .list-group-item {
+  border: none;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.25rem;
+  transition: background 0.3s;
+}
+
+.sidebar .list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sidebar .list-group-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.navbar h5 {
+  font-weight: 600;
+  color: #1d3557;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-weight: 600;
+  color: #1d3557;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #0077b6;
+  border-color: #0077b6;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.btn-primary:hover {
+  background-color: #023e8a;
+  border-color: #023e8a;
+}
+
+.btn-success {
+  background-color: #2a9d8f;
+  border-color: #2a9d8f;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.btn-success:hover {
+  background-color: #21867a;
+  border-color: #21867a;
+}
+
+/* Inputs */
+input, select, textarea {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  padding: 0.6rem 0.8rem;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
+  outline: none;
+}
+
+/* Result Box */
+.alert {
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  border-left: 6px solid #0077b6;
+  padding: 1rem 1.2rem;
+  font-size: 0.95rem;
+}
+
+#risk_score {
+  color: #e63946;
+  font-weight: bold;
+}
+
+#step_up {
+  color: #f4a261;
+  font-weight: bold;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.85rem;
+  padding: 0.5em 0.75em;
+  border-radius: 0.6rem;
+}
+
+/* Tables */
+.table thead th {
+  background-color: #edf2f7;
+  color: #333;
+  font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Responsive Sidebar Toggle */
+#menu-toggle {
+  font-size: 1.25rem;
+  color: #1d3557;
+  border: none;
+  background: none;
+}
