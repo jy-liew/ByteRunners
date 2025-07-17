@@ -37,7 +37,14 @@ transaction = st.session_state.transaction
 merchant_name = transaction["recipient"]
 category = get_merchant_category(merchant_name)
 esg_tag = get_esg_tag(category)
+risk_score = random.choice(["LOW", "MEDIUM", "HIGH"])
 
+st.session_state["risk_score"] = risk_score
+risk_color = {
+    "LOW": "🟢 LOW",
+    "MEDIUM": "🟡 MEDIUM",
+    "HIGH": "🔴 HIGH"
+}
 # ---- Card Layout ----
 with st.container():
     st.markdown("""
@@ -54,6 +61,8 @@ with st.container():
         st.write(f"**🗂️ Category:** `{category}`")
         st.write(f"**📊 ESG Tag:** {get_esg_badge(esg_tag)}")
         st.write(f"**🆔 Device ID:** {transaction['device_id']}")
+        st.markdown(f"<div style='font-size: 18px;'>🧠 <b>Risk Score:</b> {risk_color[risk_score]}</div>", unsafe_allow_html=True)
+
 
 # ---- Donation ----
 st.markdown("""
