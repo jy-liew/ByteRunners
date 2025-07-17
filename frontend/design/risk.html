@@ -1,0 +1,44 @@
+------------------- risk.html -------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluate Transaction Risk | SafeTap</title>
+    <link rel="stylesheet" href="css/safetap.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container py-5">
+        <h2 class="mb-4">🛡️ Transaction Risk Evaluation</h2>
+
+        <form id="transactionForm">
+            <div class="mb-3">
+                <label for="user_id" class="form-label">User ID</label>
+                <input type="text" class="form-control" id="user_id" required />
+            </div>
+            <div class="mb-3">
+                <label for="device_id" class="form-label">Device ID</label>
+                <input type="text" class="form-control" id="device_id" required />
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount (RM)</label>
+                <input type="number" step="0.01" class="form-control" id="amount" required />
+            </div>
+            <div class="mb-3">
+                <label for="time_of_day" class="form-label">Time (HH:MM)</label>
+                <input type="time" class="form-control" id="time_of_day" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Evaluate</button>
+        </form>
+
+        <div id="resultBox" class="alert mt-4 d-none">
+            <h5 class="alert-heading">Result</h5>
+            <p><strong>Risk Score:</strong> <span id="risk_score"></span></p>
+            <p><strong>Step-Up Required:</strong> <span id="step_up"></span></p>
+        </div>
+    </div>
+
+    <script src="js/safetap.js"></script>
+</body>
+</html>

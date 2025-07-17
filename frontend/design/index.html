@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeTap Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/safetap.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="border-end bg-gradient sidebar" id="sidebar-wrapper">
+            <div class="sidebar-heading text-white px-3 py-4 d-flex align-items-center">
+                <img src="assets/img/logo_only.png" alt="Logo" width="30" class="me-2">
+                <span class="fw-bold">SafeTap</span>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="index.html" class="list-group-item list-group-item-action bg-transparent text-white">Dashboard</a>
+                <a href="risk.html" class="list-group-item list-group-item-action bg-transparent text-white">Evaluate Risk</a>
+                <a href="esg.html" class="list-group-item list-group-item-action bg-transparent text-white">ESG Insights</a>
+                <a href="reports.html" class="list-group-item list-group-item-action bg-transparent text-white">Reports</a>
+                <a href="settings.html" class="list-group-item list-group-item-action bg-transparent text-white">Settings</a>
+            </div>
+        </div>
+
+        <!-- Page content -->
+        <div id="page-content-wrapper" class="flex-grow-1">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm px-4">
+                <div class="container-fluid">
+                    <button class="btn btn-outline-secondary d-md-none" id="menu-toggle">☰</button>
+                    <h5 class="mb-0 fw-bold">Admin</h5>
+                    <img src="assets/img/admin.png" alt="Admin" width="32" class="rounded-circle">
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">Quick Risk Evaluation</h5>
+                                <p class="text-muted">Tap below to evaluate a transaction for fraud risk</p>
+                                <a href="risk.html" class="btn btn-primary w-100">Go to Risk Form</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">ESG Awareness Tool</h5>
+                                <p class="text-muted">Check merchant sustainability impact and suggest donations</p>
+                                <a href="esg.html" class="btn btn-success w-100">Launch ESG Tool</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow border-0">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">Recent Alerts</h5>
+                                <table class="table table-hover mt-3">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Device</th>
+                                            <th>Amount (RM)</th>
+                                            <th>Time</th>
+                                            <th>Risk</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>user_001</td>
+                                            <td>device_A</td>
+                                            <td>1250.00</td>
+                                            <td>01:32</td>
+                                            <td><span class="badge bg-danger">HIGH</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>user_005</td>
+                                            <td>device_C</td>
+                                            <td>180.00</td>
+                                            <td>23:00</td>
+                                            <td><span class="badge bg-warning">MEDIUM</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>user_011</td>
+                                            <td>device_M</td>
+                                            <td>60.00</td>
+                                            <td>09:15</td>
+                                            <td><span class="badge bg-success">LOW</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/safetap.js"></script>
+</body>
+</html>
