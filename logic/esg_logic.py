@@ -1,3 +1,4 @@
+#esg_logic.py
 import json
 
 # Load ESG tag mapping
@@ -14,7 +15,29 @@ def get_merchant_category(merchant_name):
 def get_esg_tag(category):
     return esg_tags.get(category, "Unknown")
 
-def get_donation_message(esg_tag, donate):
-    if donate:
-        return "✅ Thank you! RM0.50 will be donated to the Red Cross."
-    return None
+
+
+# ---- ESG Badge Display ----
+def get_esg_badge(tag):
+    badge_map = {
+        "High Impact": "🟥 High Impact",
+        "Medium Impact": "🟧 Medium Impact",
+        "Low Impact": "🟩 Low Impact",
+        "Positive Impact": "🟦 Positive Impact",
+        "Neutral": "⬜ Neutral",
+        "Unknown": "⬛ Unknown"
+    }
+    return badge_map.get(tag, "⬛ Unknown")
+
+# ---- ESG Message Panel ----
+def get_esg_message(tag):
+    if tag == "Positive Impact":
+        return "🌟 Great! This merchant supports sustainability.", "success"
+    elif tag == "Low Impact":
+        return "✅ This merchant has minimal ESG impact.", "info"
+    elif tag == "Neutral":
+        return "ℹ️ This merchant is neutral in ESG terms.", "info"
+    elif tag in ["High Impact", "Medium Impact"]:
+        return "⚠️ This transaction may have ESG concerns. Consider offsetting it.", "warning"
+    else:
+        return "⚠️ ESG info not available for this merchant.", "warning"

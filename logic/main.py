@@ -1,8 +1,8 @@
+#main.py
 import streamlit as st
 import random
-import pandas as pd
-import datetime
-from esg_logic import get_merchant_category, get_esg_tag, get_donation_message
+from donation_logic import record_donation, get_donation_dataframe
+from esg_logic import get_merchant_category, get_esg_tag, get_esg_badge, get_esg_message
 
 st.set_page_config(page_title="ESG Demo", layout="centered")
 st.markdown("""
@@ -32,23 +32,11 @@ if "transaction" not in st.session_state:
 if "donation_history" not in st.session_state:
     st.session_state.donation_history = []
 
-# Randomly choose one transaction
+# transaction details (randomly for demo)
 transaction = st.session_state.transaction
 merchant_name = transaction["recipient"]
 category = get_merchant_category(merchant_name)
 esg_tag = get_esg_tag(category)
-
-# ---- ESG Badge Display ----
-def get_esg_badge(tag):
-    badge_map = {
-        "High Impact": "🟥 High Impact",
-        "Medium Impact": "🟧 Medium Impact",
-        "Low Impact": "🟩 Low Impact",
-        "Positive Impact": "🟦 Positive Impact",
-        "Neutral": "⬜ Neutral",
-        "Unknown": "⬛ Unknown"
-    }
-    return badge_map.get(tag, "⬛ Unknown")
 
 # ---- Card Layout ----
 with st.container():
@@ -83,16 +71,13 @@ if not st.session_state.donated:
     if st.button("✅ Donate Now"):
         if st.session_state.selected_amount > 0:
             st.session_state.total_donation += st.session_state.selected_amount
-            # Save donation entry to history
-            st.session_state.donation_history.append({
-                "Sender": transaction["sender"],
-                "Merchant": merchant_name,
-                "Amount Donated (RM)": st.session_state.selected_amount,
-                "Category": category,
-                "ESG Tag": esg_tag,
-                "Device ID": transaction["device_id"],
-                "Timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            })
+            record_donation(
+                st.session_state.donation_history,
+                transaction,
+                category,
+                esg_tag,
+                st.session_state.selected_amount
+            )
             st.session_state.donated = True
             st.rerun()
         else:
@@ -110,31 +95,23 @@ else:
     st.success(f"🎉 Thank you! RM{st.session_state.selected_amount:.2f} has been donated to the Red Cross.")
 
 # ---- ESG Message Panel ----
-if esg_tag == "Positive Impact":
-    st.success("🌟 Great! This merchant supports sustainability.")
-elif esg_tag == "Low Impact":
-    st.info("✅ This merchant has minimal ESG impact.")
-elif esg_tag == "Neutral":
-    st.info("ℹ️ This merchant is neutral in ESG terms.")
-elif esg_tag in ["High Impact", "Medium Impact"]:
-    st.warning("⚠️ This transaction may have ESG concerns. Consider offsetting it.")
-else:
-    st.warning("⚠️ ESG info not available for this merchant.")
+msg, msg_type = get_esg_message(esg_tag)
+getattr(st, msg_type)(msg)
 
-# ---- donation Summary ----
+# ---- total donation Summary ----
 st.markdown("""
     <div style='font-size: 20px; font-weight: 600; margin-top: 2rem;'>💰 Total Donations Contributed</div>
 """, unsafe_allow_html=True)
 st.markdown(f"<div style='font-size: 18px;'>RM {st.session_state.total_donation:.2f}</div>", unsafe_allow_html=True)
 
-#---- donation history ----
+#---- donation history ---- view all past 7 donations, download for full donation history
 st.markdown("""<div style='font-size: 20px; font-weight: 600;'>📖 Donation History</div>""", unsafe_allow_html=True)
 
 with st.expander("💾 View All Past Donations", expanded=False):
     if st.session_state.donation_history:
-        df = pd.DataFrame(st.session_state.donation_history)
+        df = get_donation_dataframe(st.session_state.donation_history)
         st.dataframe(df.tail(10), use_container_width=True)
-        csv = df.to_csv(index=False).encode('utf-8')
+        csv = df.to_csv(index=False).encode("utf-8")
         st.download_button(
             label="⬇️ Download Full History as CSV",
             data=csv,
@@ -144,8 +121,8 @@ with st.expander("💾 View All Past Donations", expanded=False):
     else:
         st.info("No donations recorded yet.")
 
-# ---- Refresh Button ----
-if st.button("🔁 Generate New Transaction"):
+# ---- Refresh Button ---- (for demo purposes)
+if st.button("🔁 Generate New Transaction (Demo)"):
     st.session_state.transaction = random.choice(demo_transactions)
     st.session_state.donated = False
     st.session_state.selected_amount = 0.00
