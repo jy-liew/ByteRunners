@@ -1,4 +1,3 @@
-<!-- Save as: risk.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,13 +71,12 @@
       <p><strong>Step-Up Authentication:</strong> <span id="step_up"></span></p>
       <p><strong>ESG Tag:</strong> <span id="esg_tag"></span></p>
       <p><strong>Estimated CO₂ Emissions:</strong> <span id="co2_output"></span></p>
-      <p class="mt-3 small text-muted">📌 CO₂ emissions are calculated based on merchant category and amount spent. Donations help fund certified carbon offset initiatives like reforestation and renewable energy.</p>
     </div>
 
     <div id="donationBox" class="donation-section d-none p-4 rounded shadow-sm" style="background:#f0f8ff; border-left:5px solid #2a9d8f;">
-      <h5>🌍 Help Offset Your Environmental Impact</h5>
-      <p>Your transaction emitted <strong><span id="co2Text">0</span> kg</strong> of CO₂. Contribute to verified sustainability projects to make a difference.</p>
-      <label for="donationSlider" class="form-label mt-2">Offset CO₂ via Donation (RM 0–20):</label>
+      <h5>🌍 Offset Your Environmental Impact</h5>
+      <p>Your transaction emitted <strong><span id="co2Text">0</span> kg</strong> of CO₂.</p>
+      <label for="donationSlider" class="form-label mt-2">Offset via Donation (RM 0–20):</label>
       <input type="range" class="form-range" min="0" max="20" step="1" id="donationSlider">
       <p>You selected: RM <strong id="donationValue">0</strong></p>
       <div class="d-flex justify-content-between">
@@ -101,13 +99,33 @@
 
   <!-- OTP Section -->
   <div id="otpSection" class="text-center bg-light p-4 d-none" style="border-top: 3px solid #2a9d8f; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1050;">
-    <strong>🔐 Enter OTP to Confirm Transaction</strong><br />
-    <small class="text-muted">💡 Type in <b>123456</b> to confirm payment (Demo)</small><br />
+    <strong>🔐 Enter OTP to Confirm Payment (Use: <u>123456</u>)</strong><br />
     <input type="text" id="otpInput" maxlength="6" class="form-control d-inline-block mt-3 mb-2" style="max-width: 200px;" placeholder="6-digit OTP" />
     <br />
     <button class="btn btn-primary" onclick="verifyOTP()">Verify & Proceed</button>
   </div>
 
+  <!-- Receipt Modal -->
+  <div class="modal fade" id="receiptModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">✅ Payment Successful</h5>
+        </div>
+        <div class="modal-body">
+          <p>🎉 Your transaction & donation have been processed.</p>
+          <p>Thank you for contributing to sustainability!</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button class="btn btn-primary" onclick="shareReceipt()">📤 Share Receipt</button>
+          <a href="index.html" class="btn btn-outline-secondary">🏠 Return to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti JS -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const esgMap = {
       "Grab": { tag: "Positive Impact", score: 0 },
@@ -181,19 +199,28 @@
         document.getElementById("otpSection").classList.remove("d-none");
         document.getElementById("otpInput").focus();
       } else {
-        alert("✅ Transaction completed successfully.");
+        launchReceipt();
       }
     });
 
     function verifyOTP() {
       const otp = document.getElementById("otpInput").value.trim();
-      const validOTP = "123456";
-      if (otp === validOTP) {
-        alert("✅ OTP Verified. Transaction completed successfully.");
+      if (otp === "123456") {
         document.getElementById("otpSection").classList.add("d-none");
+        launchReceipt();
       } else {
-        alert("❌ Incorrect OTP. Please enter the correct 6-digit code.");
+        alert("❌ Invalid OTP. Please enter 123456 to proceed.");
       }
+    }
+
+    function launchReceipt() {
+      confetti({ particleCount: 200, spread: 80 });
+      const receiptModal = new bootstrap.Modal(document.getElementById("receiptModal"));
+      receiptModal.show();
+    }
+
+    function shareReceipt() {
+      alert("🧾 Receipt shared successfully! (simulated)");
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
