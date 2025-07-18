@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +12,7 @@
       font-family: 'Inter', sans-serif;
       padding-top: 60px;
     }
+
     .card-form {
       background: #fff;
       border-radius: 16px;
@@ -20,6 +22,7 @@
       margin: auto;
       position: relative;
     }
+
     .home-btn {
       position: absolute;
       top: 20px;
@@ -31,22 +34,38 @@
       text-decoration: none;
       font-weight: 500;
     }
+
     .badge-risk {
       padding: 0.4rem 0.8rem;
       border-radius: 1rem;
       font-weight: 600;
     }
-    .low { background-color: #2a9d8f; color: #fff; }
-    .medium { background-color: #f4a261; color: #000; }
-    .high { background-color: #e63946; color: #fff; }
+
+    .low {
+      background-color: #2a9d8f;
+      color: #fff;
+    }
+
+    .medium {
+      background-color: #f4a261;
+      color: #000;
+    }
+
+    .high {
+      background-color: #e63946;
+      color: #fff;
+    }
+
     .form-range::-webkit-slider-thumb {
       background: #2a9d8f;
     }
+
     .form-range::-moz-range-thumb {
       background: #2a9d8f;
     }
   </style>
 </head>
+
 <body>
   <div class="card-form">
     <a href="index.html" class="home-btn">🏠 Home</a>
@@ -55,17 +74,18 @@
       <label>User ID</label>
       <input type="text" class="form-control mb-3" id="user_id" value="user_1" required>
       <label>Device ID</label>
-      <input type="text" class="form-control mb-3" id="device_id" value="device_1" required>
+      <input type="text" class="form-control mb-3" id="device_id" value="phone_1" required>
       <label>Amount (RM)</label>
       <input type="number" class="form-control mb-3" id="amount" value="100" required>
       <label>Time of Day</label>
-      <input type="time" class="form-control mb-3" id="time_of_day" value="12:00" required>
+      <input type="time" class="form-control mb-3" id="time_of_day" value="10:00" required>
       <label>Merchant</label>
       <input type="text" class="form-control mb-3" id="merchant" value="Zalora" required>
       <button type="submit" class="btn btn-primary w-100">Run Simulation</button>
     </form>
 
-    <div id="resultBox" class="mt-4 d-none p-4 rounded shadow-sm" style="background:#fff8dc; border-left:5px solid #f4a261;">
+    <div id="resultBox" class="mt-4 d-none p-4 rounded shadow-sm"
+      style="background:#fff8dc; border-left:5px solid #f4a261;">
       <h5 class="mb-3">🔍 ESG & Risk Insights</h5>
       <p><strong>Risk Score:</strong> <span id="risk_score" class="badge-risk"></span></p>
       <p><strong>Step-Up Authentication:</strong> <span id="step_up"></span></p>
@@ -73,7 +93,8 @@
       <p><strong>Estimated CO₂ Emissions:</strong> <span id="co2_output"></span></p>
     </div>
 
-    <div id="donationBox" class="donation-section d-none p-4 rounded shadow-sm" style="background:#f0f8ff; border-left:5px solid #2a9d8f;">
+    <div id="donationBox" class="donation-section d-none p-4 rounded shadow-sm"
+      style="background:#f0f8ff; border-left:5px solid #2a9d8f;">
       <h5>🌍 Offset Your Environmental Impact</h5>
       <p>Your transaction emitted <strong><span id="co2Text">0</span> kg</strong> of CO₂.</p>
       <label for="donationSlider" class="form-label mt-2">Offset via Donation (RM 0–20):</label>
@@ -98,9 +119,11 @@
   </div>
 
   <!-- OTP Section -->
-  <div id="otpSection" class="text-center bg-light p-4 d-none" style="border-top: 3px solid #2a9d8f; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1050;">
+  <div id="otpSection" class="text-center bg-light p-4 d-none"
+    style="border-top: 3px solid #2a9d8f; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1050;">
     <strong>🔐 Enter OTP to Confirm Payment (Use: <u>123456</u>)</strong><br />
-    <input type="text" id="otpInput" maxlength="6" class="form-control d-inline-block mt-3 mb-2" style="max-width: 200px;" placeholder="6-digit OTP" />
+    <input type="text" id="otpInput" maxlength="6" class="form-control d-inline-block mt-3 mb-2"
+      style="max-width: 200px;" placeholder="6-digit OTP" />
     <br />
     <button class="btn btn-primary" onclick="verifyOTP()">Verify & Proceed</button>
   </div>
@@ -161,8 +184,8 @@
 
       finalRisk = result.risk_score.toUpperCase();
       const esg = esgMap[merchant] || { tag: "Unknown", score: 1 };
-      if (finalRisk === "LOW" && esg.score >= 2) finalRisk = "MEDIUM";
-      if (finalRisk === "MEDIUM" && esg.score >= 2) finalRisk = "HIGH";
+      //if (finalRisk === "LOW" && esg.score >= 2) finalRisk = "MEDIUM";
+      //if (finalRisk === "MEDIUM" && esg.score >= 2) finalRisk = "HIGH";
       showOTP = (finalRisk === "HIGH" || finalRisk === "MEDIUM");
 
       const co2 = (esg.score * amount * 0.1).toFixed(2);
@@ -225,4 +248,5 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
