@@ -15,84 +15,46 @@
       min-height: 100vh;
       padding-top: 60px;
     }
-
     .card-form {
       background: #ffffff;
       border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
       padding: 2.5rem 2rem;
-      max-width: 700px;
+      max-width: 720px;
       margin: auto;
     }
-
     h2 {
       font-weight: 700;
       color: #1d3557;
     }
-
     .form-label {
       font-weight: 600;
       color: #1d3557;
     }
-
     .btn-evaluate {
       background: #457b9d;
       border: none;
       border-radius: 10px;
       padding: 0.75rem;
       font-weight: 600;
-      transition: all 0.3s ease;
     }
-
-    .btn-evaluate:hover {
-      background: #1d3557;
-    }
-
     .alert-result {
       border-radius: 12px;
       margin-top: 1.5rem;
       padding: 1rem 1.5rem;
       font-size: 0.95rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
     }
-
     .badge-risk {
       font-size: 0.95rem;
       padding: 0.4rem 0.75rem;
       border-radius: 20px;
       font-weight: 600;
     }
-
-    .high {
-      background-color: #e63946;
-      color: #fff;
-    }
-
-    .medium {
-      background-color: #f4a261;
-      color: #000;
-    }
-
-    .low {
-      background-color: #2a9d8f;
-      color: #fff;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.6s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    .high { background-color: #e63946; color: #fff; }
+    .medium { background-color: #f4a261; color: #000; }
+    .low { background-color: #2a9d8f; color: #fff; }
+    .fade-in { animation: fadeIn 0.6s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 
@@ -123,7 +85,7 @@
       <div class="d-grid mt-4">
         <button type="submit" class="btn btn-evaluate">Run Simulation</button>
       </div>
-      <div class="d-grid mt-4">
+      <div class="d-grid mt-3">
         <button type="button" class="btn btn-secondary" onclick="location.href='index.html'">Home</button>
       </div>
     </form>
@@ -132,12 +94,12 @@
       <h5 class="fw-bold">🔎 Result</h5>
       <p><strong>Risk Score:</strong> <span id="risk_score" class="badge-risk"></span></p>
       <p><strong>Step-Up Authentication Required:</strong> <span id="step_up"></span></p>
-      <hr />
       <p><strong>ESG Tag:</strong> <span id="esg_tag"></span></p>
+      <p><strong>Gamified Feedback:</strong> <span id="gamified_msg"></span></p>
     </div>
   </div>
 
-  <!-- Simulated OTP Modal -->
+  <!-- OTP Modal -->
   <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -145,7 +107,7 @@
           <h5 class="modal-title" id="otpModalLabel">🔐 Extra Authentication Required</h5>
         </div>
         <div class="modal-body">
-          <p>We've sent a simulated OTP to your device. Please enter <strong>123456</strong> to continue.</p>
+          <p>Simulated OTP sent. Enter <strong>123456</strong> to proceed.</p>
           <input type="text" id="otpInput" class="form-control" placeholder="Enter OTP" />
         </div>
         <div class="modal-footer">
@@ -162,16 +124,20 @@
       const riskScoreEl = document.getElementById("risk_score");
       const stepUpEl = document.getElementById("step_up");
       const esgTagEl = document.getElementById("esg_tag");
+      const gamifiedMsgEl = document.getElementById("gamified_msg");
 
-      const getEsgTag = (merchant) => {
-        const mapping = {
-          "Grab": "Transport – Positive Impact",
-          "Zalora": "Fashion – Fast Fashion (High Impact)",
-          "Lotus": "Grocery – Neutral",
-          "Shell": "Fuel – High Carbon Impact",
-          "TNG": "Fintech – Low Impact"
-        };
-        return mapping[merchant] || "Unknown Merchant";
+      const esgMap = {
+        "Grab": { tag: "Transport – Positive Impact", score: 0 },
+        "Zalora": { tag: "Fashion – Fast Fashion (High Impact)", score: 2 },
+        "Lotus": { tag: "Grocery – Neutral", score: 1 },
+        "Shell": { tag: "Fuel – High Carbon Impact", score: 2 },
+        "TNG": { tag: "Fintech – Low Impact", score: 0 }
+      };
+
+      const getGamifiedMsg = (risk, esgScore) => {
+        if (risk === "LOW" && esgScore === 0) return "🌱 Green & Safe! You earned a Green Badge!";
+        if (risk === "HIGH" && esgScore >= 2) return "🚨 Risk + Unsustainable! Improve choices.";
+        return "⚠️ Mixed Result. Stay alert & eco-aware.";
       };
 
       form.addEventListener("submit", async (e) => {
@@ -180,33 +146,37 @@
         const device_id = document.getElementById("device_id").value;
         const amount = parseFloat(document.getElementById("amount").value);
         const time_of_day = document.getElementById("time_of_day").value;
-        const merchant = document.getElementById("merchant").value;
+        const merchant = document.getElementById("merchant").value.trim();
 
         const data = { user_id, device_id, amount, time_of_day };
 
         try {
-          const response = await fetch("http://127.0.0.1:8000/transaction", {
+          const res = await fetch("http://127.0.0.1:8000/transaction", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
           });
 
-          if (!response.ok) throw new Error("Backend failed to respond.");
-          const result = await response.json();
+          const result = await res.json();
+          const baseRisk = result.risk_score.toUpperCase();
+          const esgData = esgMap[merchant] || { tag: "Unknown", score: 1 };
 
-          const risk = result.risk_score.toLowerCase();
-          riskScoreEl.textContent = result.risk_score;
-          riskScoreEl.className = `badge-risk ${risk}`;
-          stepUpEl.textContent = result.step_up_required ? "Yes" : "No";
-          esgTagEl.textContent = getEsgTag(merchant);
+          // Influence: Raise risk if ESG score is bad
+          let finalRisk = baseRisk;
+          if (baseRisk === "LOW" && esgData.score >= 2) finalRisk = "MEDIUM";
+          if (baseRisk === "MEDIUM" && esgData.score >= 2) finalRisk = "HIGH";
+
+          riskScoreEl.textContent = finalRisk;
+          riskScoreEl.className = `badge-risk ${finalRisk.toLowerCase()}`;
+          stepUpEl.textContent = finalRisk === "MEDIUM" || finalRisk === "HIGH" ? "Yes" : "No";
+          esgTagEl.textContent = esgData.tag;
+          gamifiedMsgEl.textContent = getGamifiedMsg(finalRisk, esgData.score);
+
           resultBox.classList.remove("d-none");
 
-          // Show simulated OTP modal if step-up required
-          if (result.risk_score === "MEDIUM" || result.risk_score === "HIGH") {
-            const otpModal = new bootstrap.Modal(document.getElementById("otpModal"));
-            otpModal.show();
+          if (finalRisk === "MEDIUM" || finalRisk === "HIGH") {
+            new bootstrap.Modal(document.getElementById("otpModal")).show();
           }
-
         } catch (err) {
           alert("Error: " + err.message);
         }
@@ -214,15 +184,14 @@
     });
 
     function validateOTP() {
-      const input = document.getElementById("otpInput").value;
-      if (input === "123456") {
+      const otp = document.getElementById("otpInput").value;
+      if (otp === "123456") {
         alert("✅ OTP Verified. Transaction Approved.");
-        const modal = bootstrap.Modal.getInstance(document.getElementById("otpModal"));
-        modal.hide();
+        bootstrap.Modal.getInstance(document.getElementById("otpModal")).hide();
       } else {
         alert("❌ Invalid OTP. Try again.");
       }
-      document.getElementById('otpInput').value = "";
+      document.getElementById("otpInput").value = "";
     }
   </script>
 
