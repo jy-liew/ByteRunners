@@ -10,22 +10,47 @@ body {
 
 /* === SIDEBAR === */
 .sidebar {
-  background: linear-gradient(180deg, #1b1f3b 0%, #1d3557 100%);
+  background: rgba(15, 23, 42, 0.95);
   min-height: 100vh;
-  width: 240px;
+  width: 250px;
   padding-top: 1.5rem;
   color: #fff;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+
+.logo-bg {
+  background: url("assets/img/logo_bg.png") center center no-repeat;
+  background-size: 60%;
+  opacity: 0.08;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.sidebar .sidebar-heading,
+.sidebar .list-group {
+  position: relative;
+  z-index: 2;
 }
 
 .sidebar-heading {
   font-size: 1.4rem;
   font-weight: 600;
   padding-left: 1.25rem;
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.sidebar-heading img {
+  margin-right: 0.75rem;
 }
 
 .list-group-item {
@@ -50,14 +75,14 @@ body {
 }
 
 #page-content-wrapper {
-  margin-left: 240px;
+  margin-left: 250px;
   width: 100%;
   transition: all 0.3s ease;
 }
 
 @media (max-width: 768px) {
   .sidebar {
-    left: -240px;
+    left: -250px;
   }
 
   .sidebar.show {
@@ -71,15 +96,25 @@ body {
 
 /* === NAVBAR === */
 .navbar {
-  background-color: #fff;
+  background-color: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   z-index: 1050;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navbar h5 {
   margin: 0;
   font-weight: 700;
   color: #1d3557;
+}
+
+.navbar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
 /* === CARDS === */
@@ -153,18 +188,14 @@ body {
 }
 
 /* === FORMS === */
-input,
-textarea,
-select {
+input, textarea, select {
   border-radius: 8px;
   border: 1px solid #ced4da;
   padding: 0.6rem 0.8rem;
   transition: border-color 0.3s ease-in-out;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+input:focus, textarea:focus, select:focus {
   border-color: #0077b6;
   box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
   outline: none;
@@ -181,6 +212,7 @@ select:focus {
 }
 
 #risk_score {
+  color: #e63946;
   font-weight: bold;
 }
 
