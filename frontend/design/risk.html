@@ -3,11 +3,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Evaluate Risk + ESG | SafeTap</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/safetap.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       background: linear-gradient(135deg, #1e3c72, #2a5298);
@@ -15,127 +14,176 @@
       min-height: 100vh;
       padding-top: 60px;
     }
+
     .card-form {
-      background: #fff;
+      background: #ffffff;
       border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
       padding: 2.5rem 2rem;
       max-width: 750px;
       margin: auto;
+      position: relative;
     }
-    h2 {
-      font-weight: 700;
-      color: #1d3557;
-    }
-    .form-label {
-      font-weight: 600;
-      color: #1d3557;
-    }
-    .btn-evaluate {
+
+    .btn-evaluate,
+    .btn-donate {
       background: #457b9d;
       border: none;
       border-radius: 10px;
       padding: 0.75rem;
       font-weight: 600;
+      color: #fff;
     }
-    .alert-result, .alert-success {
-      border-radius: 12px;
-      margin-top: 1.5rem;
-      padding: 1rem 1.5rem;
-      font-size: 0.95rem;
-    }
+
     .badge-risk {
       font-size: 0.95rem;
       padding: 0.4rem 0.75rem;
       border-radius: 20px;
       font-weight: 600;
     }
-    .high { background-color: #e63946; color: #fff; }
-    .medium { background-color: #f4a261; color: #000; }
-    .low { background-color: #2a9d8f; color: #fff; }
-    .fade-in { animation: fadeIn 0.6s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .high {
+      background-color: #e63946;
+      color: #fff;
+    }
+
+    .medium {
+      background-color: #f4a261;
+      color: #000;
+    }
+
+    .low {
+      background-color: #2a9d8f;
+      color: #fff;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #2a9d8f;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .badge-collection {
+      background: #eef6f6;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      display: none;
+    }
+
+    .badge-earned {
+      font-size: 2rem;
+    }
   </style>
 </head>
 
 <body>
   <div class="card-form">
+    <a href="index.html" class="home-btn">🏠 Home</a>
     <h2 class="mb-4 text-center">🔐 Simulate Transaction</h2>
     <form id="transactionForm">
-      <div class="mb-3"><label class="form-label">User ID</label><input type="text" class="form-control" id="user_id" value="user_1" required></div>
-      <div class="mb-3"><label class="form-label">Device ID</label><input type="text" class="form-control" id="device_id" value="phone_1" required></div>
-      <div class="mb-3"><label class="form-label">Amount (RM)</label><input type="number" step="0.01" class="form-control" id="amount" value="100" required></div>
-      <div class="mb-3"><label class="form-label">Time (HH:MM)</label><input type="time" class="form-control" id="time_of_day" value="11:30" required></div>
-      <div class="mb-3"><label class="form-label">Merchant</label><input type="text" class="form-control" id="merchant" value="Zalora" required></div>
+      <label for="user_id" class="form-label">User ID</label>
+      <input type="text" id="user_id" class="form-control mb-3" placeholder="User ID" value="user_1" required />
 
-      <div class="d-grid mt-4"><button type="submit" class="btn btn-evaluate">Run Simulation</button></div>
-      <div class="d-grid mt-3"><button type="button" class="btn btn-secondary" onclick="location.href='index.html'">Home</button></div>
+      <label for="device_id" class="form-label">Device ID</label>
+      <input type="text" id="device_id" class="form-control mb-3" placeholder="Device ID" value="device_1" required />
+
+      <label for="amount" class="form-label">Amount (RM)</label>
+      <input type="number" id="amount" class="form-control mb-3" placeholder="Amount (RM)" value="100" required />
+
+      <label for="time_of_day" class="form-label">Time of Day</label>
+      <input type="time" id="time_of_day" class="form-control mb-3" value="12:00" required />
+
+      <label for="merchant" class="form-label">Merchant</label>
+      <input type="text" id="merchant" class="form-control mb-3" placeholder="Merchant" value="Zalora" required />
+
+      <button type="submit" class="btn btn-evaluate w-100">Run Simulation</button>
     </form>
 
-    <!-- Risk Result -->
-    <div id="resultBox" class="alert alert-result d-none fade-in">
-      <h5 class="fw-bold">🔎 Result</h5>
+    <div id="resultBox" class="alert alert-light mt-4 d-none">
       <p><strong>Risk Score:</strong> <span id="risk_score" class="badge-risk"></span></p>
-      <p><strong>Step-Up Authentication Required:</strong> <span id="step_up"></span></p>
+      <p><strong>Step-Up Authentication:</strong> <span id="step_up"></span></p>
       <p><strong>ESG Tag:</strong> <span id="esg_tag"></span></p>
       <p><strong>CO₂ Emissions:</strong> <span id="co2_output"></span></p>
-      <p><strong>Offset Suggestion:</strong> RM <span id="offset_output"></span> suggested to offset impact</p>
+      <p><strong>Offset Suggestion:</strong> RM <span id="offset_output"></span></p>
       <p><strong>Gamified Feedback:</strong> <span id="gamified_msg"></span></p>
     </div>
 
-    <!-- Donation Suggestion -->
-    <div id="donationBox" class="alert alert-success d-none fade-in">
-      <h5 class="fw-bold">🌍 Offset Your Carbon Impact</h5>
-      <p>This transaction emitted <strong><span id="donation_co2"></span></strong> of CO₂.</p>
-      <p>Would you like to donate <strong>RM <span id="donation_amount"></span></strong> to local reforestation projects?</p>
-      <div class="d-grid"><button class="btn btn-outline-dark">Yes, Donate</button></div>
+    <div id="donationBox" class="alert alert-success d-none">
+      <p><strong>This transaction emitted:</strong> <span id="donation_co2"></span> kg of CO₂</p>
+      <p><strong>Suggested Donation:</strong> RM <span id="donation_amount"></span> to support ESG projects</p>
+      <button class="btn btn-donate w-100" id="donateBtn">Yes, Donate</button>
+    </div>
+
+    <div id="confirmationBox" class="alert alert-info d-none mt-3">
+      <p><strong>Total Paid (Txn + Donation):</strong> RM <span id="total_paid"></span></p>
+      <p>✅ Offset confirmed. You earned a 🌿 Green Badge!</p>
+    </div>
+
+    <!-- ESG Badge Showcase -->
+    <div id="badgeBox" class="badge-collection">
+      <strong>🎖 ESG Badge Unlocked:</strong> <span class="badge-earned">🌿</span> You now have 1 badge in your collection.
     </div>
   </div>
 
   <!-- OTP Modal -->
   <div class="modal fade" id="otpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
-      <div class="modal-header"><h5 class="modal-title">🔐 Extra Authentication Required</h5></div>
-      <div class="modal-body">
-        <p>Simulated OTP sent. Enter <strong>123456</strong> to proceed.</p>
-        <input type="text" id="otpInput" class="form-control" placeholder="Enter OTP">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">🔐 OTP Verification</h5>
+        </div>
+        <div class="modal-body">
+          <p>Enter <strong>123456</strong> to continue</p>
+          <input type="text" id="otpInput" class="form-control" />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="validateOTP()">Verify</button>
+        </div>
       </div>
-      <div class="modal-footer"><button class="btn btn-primary" onclick="validateOTP()">Verify</button></div>
-    </div></div>
+    </div>
   </div>
 
-  <!-- Script Logic -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("transactionForm");
-      const resultBox = document.getElementById("resultBox");
       const donationBox = document.getElementById("donationBox");
+      const confirmationBox = document.getElementById("confirmationBox");
+      const resultBox = document.getElementById("resultBox");
+      const badgeBox = document.getElementById("badgeBox");
 
       const riskScoreEl = document.getElementById("risk_score");
       const stepUpEl = document.getElementById("step_up");
       const esgTagEl = document.getElementById("esg_tag");
-      const gamifiedMsgEl = document.getElementById("gamified_msg");
       const co2El = document.getElementById("co2_output");
       const offsetEl = document.getElementById("offset_output");
-      const donationCO2El = document.getElementById("donation_co2");
-      const donationAmountEl = document.getElementById("donation_amount");
+      const gamifiedMsgEl = document.getElementById("gamified_msg");
+
+      const donationCO2 = document.getElementById("donation_co2");
+      const donationAmount = document.getElementById("donation_amount");
+      const totalPaid = document.getElementById("total_paid");
 
       const esgMap = {
-        "Grab": { tag: "Transport – Positive Impact", score: 0 },
-        "Zalora": { tag: "Fashion – Fast Fashion (High Impact)", score: 2 },
-        "Lotus": { tag: "Grocery – Neutral", score: 1 },
-        "Shell": { tag: "Fuel – High Carbon Impact", score: 2 },
-        "TNG": { tag: "Fintech – Low Impact", score: 0 }
-      };
-
-      const getGamifiedMsg = (risk, esgScore) => {
-        if (risk === "LOW" && esgScore === 0) return "🌱 Green & Safe! You earned a Green Badge!";
-        if (risk === "HIGH" && esgScore >= 2) return "🚨 Risk + Unsustainable! Improve choices.";
-        return "⚠️ Mixed Result. Stay alert & eco-aware.";
+        Grab: { tag: "Transport – Positive", score: 0 },
+        Zalora: { tag: "Fashion – High Impact", score: 2 },
+        Shell: { tag: "Fuel – High Carbon", score: 2 },
+        Lotus: { tag: "Grocery – Neutral", score: 1 },
+        TNG: { tag: "Fintech – Low Impact", score: 0 },
       };
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        donationBox.classList.add("d-none");
+        confirmationBox.classList.add("d-none");
+        badgeBox.style.display = "none";
+
         const user_id = document.getElementById("user_id").value;
         const device_id = document.getElementById("device_id").value;
         const amount = parseFloat(document.getElementById("amount").value);
@@ -143,69 +191,71 @@
         const merchant = document.getElementById("merchant").value.trim();
 
         const data = { user_id, device_id, amount, time_of_day };
+        const result = await fetch("http://127.0.0.1:8000/transaction", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }).then((r) => r.json());
 
-        try {
-          const res = await fetch("http://127.0.0.1:8000/transaction", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          });
+        const baseRisk = result.risk_score.toUpperCase();
+        const esgData = esgMap[merchant] || { tag: "Unknown", score: 1 };
+        let finalRisk = baseRisk;
+        if (baseRisk === "LOW" && esgData.score >= 2) finalRisk = "MEDIUM";
+        if (baseRisk === "MEDIUM" && esgData.score >= 2) finalRisk = "HIGH";
 
-          const result = await res.json();
-          const baseRisk = result.risk_score.toUpperCase();
-          const esgData = esgMap[merchant] || { tag: "Unknown", score: 1 };
+        const co2 = esgData.score * amount * 0.1;
+        let offset = co2 * 1;
+        offset = Math.min(offset, 20); // Cap at RM20
 
-          // Apply ESG Influence
-          let finalRisk = baseRisk;
-          if (baseRisk === "LOW" && esgData.score >= 2) finalRisk = "MEDIUM";
-          if (baseRisk === "MEDIUM" && esgData.score >= 2) finalRisk = "HIGH";
+        riskScoreEl.textContent = finalRisk;
+        riskScoreEl.className = `badge-risk ${finalRisk.toLowerCase()}`;
+        stepUpEl.textContent =
+          finalRisk === "HIGH" || finalRisk === "MEDIUM" ? "Yes" : "No";
+        esgTagEl.textContent = esgData.tag;
+        co2El.textContent = `${co2.toFixed(2)} kg`;
+        offsetEl.textContent = offset.toFixed(2);
+        gamifiedMsgEl.textContent =
+          finalRisk === "LOW" && esgData.score === 0
+            ? "🌿 Green & Safe! You earned a Badge!"
+            : "⚠️ Consider your impact.";
 
-          // CO2 Emission & Offset
-          const co2 = esgData.score * amount * 0.1; // 0.1 kg CO2 per RM per ESG score
-          const offset = co2 * 1; // RM1 = 1kg CO₂ offset (assumed)
+        resultBox.classList.remove("d-none");
 
-          // Render Result
-          riskScoreEl.textContent = finalRisk;
-          riskScoreEl.className = `badge-risk ${finalRisk.toLowerCase()}`;
-          stepUpEl.textContent = finalRisk === "MEDIUM" || finalRisk === "HIGH" ? "Yes" : "No";
-          esgTagEl.textContent = esgData.tag;
-          gamifiedMsgEl.textContent = getGamifiedMsg(finalRisk, esgData.score);
-          co2El.textContent = `${co2.toFixed(2)} kg CO₂ emitted`;
-          offsetEl.textContent = offset.toFixed(2);
-
-          // Show Result Box
-          resultBox.classList.remove("d-none");
-
-          // Show Donation Suggestion
-          if (co2 > 0) {
-            donationCO2El.textContent = `${co2.toFixed(2)} kg`;
-            donationAmountEl.textContent = offset.toFixed(2);
-            donationBox.classList.remove("d-none");
-          }
-
-          // Trigger OTP
-          if (finalRisk === "MEDIUM" || finalRisk === "HIGH") {
-            new bootstrap.Modal(document.getElementById("otpModal")).show();
-          }
-
-        } catch (err) {
-          alert("Error: " + err.message);
+        if (co2 > 0) {
+          donationCO2.textContent = co2.toFixed(2);
+          donationAmount.textContent = offset.toFixed(2);
+          donationBox.classList.remove("d-none");
         }
+
+        if (finalRisk === "HIGH" || finalRisk === "MEDIUM") {
+          new bootstrap.Modal(document.getElementById("otpModal")).show();
+        }
+
+        document.getElementById("donateBtn").onclick = () => {
+          const total = amount + offset;
+          totalPaid.textContent = total.toFixed(2);
+          confirmationBox.classList.remove("d-none");
+
+          // Show badge box if low risk & low ESG score
+          if (finalRisk === "LOW" && esgData.score === 0) {
+            badgeBox.style.display = "block";
+          }
+        };
       });
     });
 
     function validateOTP() {
       const otp = document.getElementById("otpInput").value;
       if (otp === "123456") {
-        alert("✅ OTP Verified. Transaction Approved.");
+        alert("✅ OTP Verified. Payment Confirmed.");
         bootstrap.Modal.getInstance(document.getElementById("otpModal")).hide();
       } else {
-        alert("❌ Invalid OTP. Try again.");
+        alert("❌ Invalid OTP.");
       }
       document.getElementById("otpInput").value = "";
     }
   </script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
