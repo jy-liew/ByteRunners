@@ -1,3 +1,4 @@
+<!-- ✅ ESG.html (Final version with badge gallery + gift logic + localStorage) -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,21 +24,8 @@
       border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
       padding: 2rem;
-      max-width: 700px;
+      max-width: 750px;
       margin: auto;
-    }
-
-    .btn-esg {
-      background: #2a9d8f;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      padding: 0.6rem 1.2rem;
-    }
-
-    .btn-esg:hover {
-      background: #21867a;
     }
 
     .badge-esg {
@@ -47,30 +35,11 @@
       font-size: 0.95rem;
     }
 
-    .impact-positive {
-      background-color: #2a9d8f;
-      color: #fff;
-    }
-
-    .impact-low {
-      background-color: #8ecae6;
-      color: #000;
-    }
-
-    .impact-medium {
-      background-color: #ffb703;
-      color: #000;
-    }
-
-    .impact-high {
-      background-color: #e63946;
-      color: #fff;
-    }
-
-    .impact-neutral {
-      background-color: #adb5bd;
-      color: #000;
-    }
+    .impact-positive { background-color: #2a9d8f; color: #fff; }
+    .impact-low { background-color: #8ecae6; color: #000; }
+    .impact-medium { background-color: #ffb703; color: #000; }
+    .impact-high { background-color: #e63946; color: #fff; }
+    .impact-neutral { background-color: #adb5bd; color: #000; }
 
     .feedback-box {
       background: #f1faee;
@@ -78,18 +47,26 @@
       padding: 1.2rem;
       border-radius: 12px;
       margin-top: 1rem;
-      font-size: 0.95rem;
     }
 
-    #donationValue {
-      font-weight: bold;
-      color: #1d3557;
+    .badge-gallery {
+      margin-top: 30px;
+    }
+
+    .badge-gallery img {
+      width: 80px;
+      height: auto;
+      margin: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .badge-gallery img:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
 
 <body>
-
   <div class="card-esg">
     <h2 class="mb-4 text-center">🌿 ESG Impact Analyzer</h2>
     <form id="esgForm">
@@ -100,16 +77,15 @@
 
       <div class="mb-3">
         <label for="donation" class="form-label">Offset Donation (RM)</label>
-        <input type="range" class="form-range" min="0" max="5" step="0.5" id="donationSlider" />
+        <input type="range" class="form-range" min="0" max="20" step="0.5" id="donationSlider" />
         <span>💸 Donation Selected: RM <span id="donationValue">0.00</span></span>
       </div>
 
       <div class="d-grid">
-        <button type="submit" class="btn btn-esg">Analyze Impact</button>
+        <button type="submit" class="btn btn-success">Analyze Impact</button>
       </div>
       <div class="d-grid">
-        <button type="button" class="btn btn-secondary" onclick="location.href='index.html'"
-          style="margin-top: 20px;">Home</button>
+        <button type="button" class="btn btn-secondary mt-3" onclick="location.href='index.html'">Home</button>
       </div>
     </form>
 
@@ -120,6 +96,12 @@
       <p><strong>ESG Tag:</strong> <span id="resultTag" class="badge-esg"></span></p>
       <p><strong>Estimated CO₂ Emission:</strong> <span id="co2Emission"></span> kg</p>
       <p id="resultMessage" class="mt-3"></p>
+    </div>
+
+    <div id="badgeGallery" class="badge-gallery text-center d-none">
+      <h5 class="mt-4">🏅 Badges You've Earned:</h5>
+      <div id="badgesContainer"></div>
+      <div id="giftBox" class="mt-3"></div>
     </div>
   </div>
 
@@ -139,6 +121,13 @@
       "Medium Impact": "impact-medium",
       "Fast Fashion – High Impact": "impact-high",
       "High Impact": "impact-high"
+    };
+
+    const badgeImageMap = {
+      "eco": "assets/img/badge_eco.png",
+      "green": "assets/img/badge_green.png",
+      "hero": "assets/img/badge_hero.png",
+      "master": "assets/img/badge_master.png"
     };
 
     document.getElementById("donationSlider").addEventListener("input", function () {
@@ -166,9 +155,41 @@
       document.getElementById("co2Emission").textContent = co2;
       document.getElementById("resultMessage").textContent = offset;
       document.getElementById("esgResult").classList.remove("d-none");
-    });
-  </script>
 
+      // Load badge + gift UI
+      renderBadgeGallery();
+    });
+
+    function renderBadgeGallery() {
+      const container = document.getElementById("badgesContainer");
+      const giftBox = document.getElementById("giftBox");
+      const gallery = document.getElementById("badgeGallery");
+      const data = JSON.parse(localStorage.getItem("esgProgress")) || { badges: [], totalDonation: 0 };
+
+      container.innerHTML = "";
+      if (data.badges.length === 0) {
+        container.innerHTML = `<p class='text-muted'>No badges earned yet. Complete a donation to unlock one!</p>`;
+      } else {
+        data.badges.forEach(badge => {
+          const img = document.createElement("img");
+          img.src = badgeImageMap[badge] || "assets/img/badge_eco.png";
+          img.alt = badge;
+          container.appendChild(img);
+        });
+      }
+
+      if (data.totalDonation >= 30) {
+        giftBox.innerHTML = `🎁 <strong>Congrats!</strong> You've donated RM ${data.totalDonation}. <button class='btn btn-warning btn-sm mt-2'>Claim Gift</button>`;
+      } else {
+        giftBox.innerHTML = `💰 Total Donated: RM ${data.totalDonation || 0}. <br><small>Donate RM 30+ to unlock a gift!</small>`;
+      }
+
+      gallery.classList.remove("d-none");
+    }
+
+    // Auto-render if already donated before
+    window.onload = () => renderBadgeGallery();
+  </script>
 </body>
 
 </html>
