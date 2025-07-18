@@ -33,6 +33,11 @@
       width: 32px;
       height: 32px;
     }
+    .badge {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.65rem;
+      border-radius: 12px;
+    }
   </style>
 </head>
 <body>
@@ -59,7 +64,7 @@
           <h5 class="mb-0 fw-bold">Admin Dashboard</h5>
           <div class="admin-profile">
             <img src="assets/img/admin.png" alt="Admin">
-            <span class="fw-semibold">admin@safetap.com</span>
+            <span class="fw-semibold small">admin@safetap.com</span>
           </div>
         </div>
       </nav>
@@ -86,12 +91,16 @@
           </div>
         </div>
 
+        <!-- Recent Alerts Section -->
         <div class="row">
           <div class="col-md-12">
             <div class="card shadow border-0">
               <div class="card-body">
-                <h5 class="card-title fw-semibold">Recent Alerts</h5>
-                <table class="table table-hover mt-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="card-title fw-semibold mb-0">Recent Alerts</h5>
+                  <a href="reports.html" class="btn btn-outline-secondary btn-sm">View All Reports</a>
+                </div>
+                <table class="table table-hover mt-2">
                   <thead>
                     <tr>
                       <th>User</th>
@@ -102,37 +111,47 @@
                     </tr>
                   </thead>
                   <tbody id="alertsTable">
-                    <tr>
-                      <td>user_001</td>
-                      <td>device_A</td>
-                      <td>1250.00</td>
-                      <td>01:32</td>
-                      <td><span class="badge bg-danger">HIGH</span></td>
-                    </tr>
-                    <tr>
-                      <td>user_005</td>
-                      <td>device_C</td>
-                      <td>180.00</td>
-                      <td>23:00</td>
-                      <td><span class="badge bg-warning text-dark">MEDIUM</span></td>
-                    </tr>
-                    <tr>
-                      <td>user_011</td>
-                      <td>device_M</td>
-                      <td>60.00</td>
-                      <td>09:15</td>
-                      <td><span class="badge bg-success">LOW</span></td>
-                    </tr>
+                    <!-- Dynamically rendered alerts -->
                   </tbody>
                 </table>
-                <!-- Can use JavaScript later to push new rows into this table -->
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
+
+  <script>
+    // Sample alert data
+    const alerts = [
+      { user: 'user_001', device: 'device_A', amount: 1250, time: '01:32', risk: 'HIGH' },
+      { user: 'user_005', device: 'device_C', amount: 180, time: '23:00', risk: 'MEDIUM' },
+      { user: 'user_011', device: 'device_M', amount: 60, time: '09:15', risk: 'LOW' },
+      { user: 'user_009', device: 'device_X', amount: 950, time: '18:10', risk: 'HIGH' },
+      { user: 'user_015', device: 'device_Y', amount: 210, time: '12:45', risk: 'MEDIUM' },
+      { user: 'user_020', device: 'device_Z', amount: 50, time: '08:20', risk: 'LOW' }
+    ];
+
+    const alertsTable = document.getElementById("alertsTable");
+
+    alerts.slice(0, 5).forEach(alert => {
+      const riskClass = alert.risk === 'HIGH' ? 'bg-danger text-white'
+                      : alert.risk === 'MEDIUM' ? 'bg-warning text-dark'
+                      : 'bg-success text-white';
+
+      alertsTable.innerHTML += `
+        <tr>
+          <td>${alert.user}</td>
+          <td>${alert.device}</td>
+          <td>${alert.amount.toFixed(2)}</td>
+          <td>${alert.time}</td>
+          <td><span class="badge ${riskClass}">${alert.risk}</span></td>
+        </tr>
+      `;
+    });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/safetap.js"></script>
