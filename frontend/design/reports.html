@@ -86,57 +86,76 @@
   </div>
 
   <script>
-    // Dummy data - replace with API response if needed
-    const reports = [
-      { id: 1, user_id: 'user_001', device_id: 'device_A', amount: 1250, time: '01:32', risk: 'HIGH' },
-      { id: 2, user_id: 'user_005', device_id: 'device_C', amount: 180, time: '23:00', risk: 'MEDIUM' },
-      { id: 3, user_id: 'user_011', device_id: 'device_M', amount: 60, time: '09:15', risk: 'LOW' },
-      { id: 4, user_id: 'user_009', device_id: 'device_X', amount: 950, time: '18:10', risk: 'HIGH' },
-      { id: 5, user_id: 'user_015', device_id: 'device_Y', amount: 210, time: '12:45', risk: 'MEDIUM' },
+    // Sample data for initial display
+    const sampleReports = [
+      { user: 'user_001', device: 'device_A', amount: 1250, time: '01:32', risk: 'HIGH' },
+      { user: 'user_005', device: 'device_C', amount: 180, time: '23:00', risk: 'MEDIUM' },
+      { user: 'user_011', device: 'device_M', amount: 60, time: '09:15', risk: 'LOW' },
+      { user: 'user_009', device: 'device_X', amount: 950, time: '18:10', risk: 'HIGH' },
+      { user: 'user_015', device: 'device_Y', amount: 210, time: '12:45', risk: 'MEDIUM' },
+      { user: 'user_020', device: 'device_Z', amount: 50, time: '08:20', risk: 'LOW' }
     ];
 
     const tableBody = document.getElementById('reportsTableBody');
     const modalBody = document.getElementById('reportModalBody');
 
-    reports.forEach((report, index) => {
-      const riskClass = report.risk === 'HIGH' ? 'badge-high'
-        : report.risk === 'MEDIUM' ? 'badge-medium'
-          : 'badge-low';
-
-      const row = `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${report.user_id}</td>
-          <td>${report.device_id}</td>
-          <td>${report.amount.toFixed(2)}</td>
-          <td>${report.time}</td>
-          <td><span class="badge-risk ${riskClass}">${report.risk}</span></td>
-          <td><button class="btn btn-sm btn-outline-primary btn-report" onclick='viewReport(${JSON.stringify(report)})'>View Report</button></td>
-        </tr>
-      `;
-      tableBody.insertAdjacentHTML("beforeend", row);
-    });
-
-    function viewReport(data) {
-      modalBody.innerHTML = `
-        <p><strong>User ID:</strong> ${data.user_id}</p>
-        <p><strong>Device ID:</strong> ${data.device_id}</p>
-        <p><strong>Amount:</strong> RM ${data.amount.toFixed(2)}</p>
-        <p><strong>Time:</strong> ${data.time}</p>
-        <p><strong>Risk Level:</strong> <span class="badge-risk ${getRiskClass(data.risk)}">${data.risk}</span></p>
-        <p><strong>Suggested Action:</strong> ${data.risk === 'HIGH' ? 'Require step-up auth (OTP) and notify security team.' :
-          data.risk === 'MEDIUM' ? 'Require step-up auth (OTP).' :
-            'Allow transaction.'
-        }</p>
-      `;
-      const modal = new bootstrap.Modal(document.getElementById('reportModal'));
-      modal.show();
-    }
-
     function getRiskClass(risk) {
       return risk === 'HIGH' ? 'badge-high' :
         risk === 'MEDIUM' ? 'badge-medium' : 'badge-low';
     }
+
+    function renderReports(reports) {
+      tableBody.innerHTML = "";
+      reports.forEach((report, index) => {
+        const riskClass = getRiskClass(report.risk);
+        const row = `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${report.user || report.user_id}</td>
+          <td>${report.device || report.device_id}</td>
+          <td>${Number(report.amount).toFixed(2)}</td>
+          <td>${report.time || report.time_of_day}</td>
+          <td><span class="badge-risk ${riskClass}">${report.risk}</span></td>
+          <td><button class="btn btn-sm btn-outline-primary btn-report" onclick='viewReport(${JSON.stringify(report)})'>View Report</button></td>
+        </tr>
+      `;
+        tableBody.insertAdjacentHTML("beforeend", row);
+      });
+    }
+
+    async function loadReports() {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/transactions");
+        let backendReports = [];
+        if (response.ok) {
+          backendReports = await response.json();
+        }
+        // Merge sample and backend transactions
+        const allReports = [...sampleReports, ...backendReports];
+        renderReports(allReports);
+      } catch (err) {
+        // If backend fails, show only sample reports
+        renderReports(sampleReports);
+      }
+    }
+
+    function viewReport(data) {
+      modalBody.innerHTML = `
+      <p><strong>User ID:</strong> ${data.user || data.user_id}</p>
+      <p><strong>Device ID:</strong> ${data.device || data.device_id}</p>
+      <p><strong>Amount:</strong> RM ${Number(data.amount).toFixed(2)}</p>
+      <p><strong>Time:</strong> ${data.time || data.time_of_day}</p>
+      <p><strong>Risk Level:</strong> <span class="badge-risk ${getRiskClass(data.risk)}">${data.risk}</span></p>
+      <p><strong>Suggested Action:</strong> ${data.risk === 'HIGH' ? 'Require step-up auth (OTP) and notify security team.' :
+          data.risk === 'MEDIUM' ? 'Require step-up auth (OTP).' :
+            'Allow transaction.'
+        }</p>
+    `;
+      const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+      modal.show();
+    }
+
+    loadReports();
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
