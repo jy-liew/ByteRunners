@@ -54,9 +54,6 @@
       margin-top: 1rem;
       font-size: 0.95rem;
     }
-    .form-check-label {
-      color: #1d3557;
-    }
     #donationValue {
       font-weight: bold;
       color: #1d3557;
@@ -71,11 +68,6 @@
     <div class="mb-3">
       <label for="merchant" class="form-label">Merchant Name</label>
       <input type="text" class="form-control" id="merchant" placeholder="e.g., Grab, Shopee, Uniqlo" required />
-    </div>
-
-    <div class="mb-3">
-      <label for="amount" class="form-label">Transaction Amount (RM)</label>
-      <input type="number" class="form-control" id="amount" placeholder="e.g., 50" required />
     </div>
 
     <div class="mb-3">
@@ -101,11 +93,11 @@
 
 <script>
   const categoryMap = {
-    "grab": { category: "Mobility", tag: "Low Impact", co2PerRM: 0.05 },
-    "shopee": { category: "E-Commerce", tag: "Medium Impact", co2PerRM: 0.1 },
-    "uniqlo": { category: "Fashion", tag: "Fast Fashion – High Impact", co2PerRM: 0.2 },
-    "tng": { category: "Fintech", tag: "Low Impact", co2PerRM: 0.03 },
-    "solarco": { category: "Energy", tag: "Positive Impact", co2PerRM: 0.01 }
+    "grab": { category: "Mobility", tag: "Low Impact", co2Estimate: 1.2 },
+    "shopee": { category: "E-Commerce", tag: "Medium Impact", co2Estimate: 2.0 },
+    "uniqlo": { category: "Fashion", tag: "Fast Fashion – High Impact", co2Estimate: 3.5 },
+    "tng": { category: "Fintech", tag: "Low Impact", co2Estimate: 0.8 },
+    "solarco": { category: "Energy", tag: "Positive Impact", co2Estimate: 0.2 }
   };
 
   const tagStyles = {
@@ -125,14 +117,13 @@
     e.preventDefault();
 
     const merchantInput = document.getElementById("merchant").value.trim().toLowerCase();
-    const amount = parseFloat(document.getElementById("amount").value);
     const donation = parseFloat(document.getElementById("donationSlider").value);
 
-    const match = categoryMap[merchantInput] || { category: "Unknown", tag: "Neutral", co2PerRM: 0.07 };
+    const match = categoryMap[merchantInput] || { category: "Unknown", tag: "Neutral", co2Estimate: 1.5 };
     const tagClass = tagStyles[match.tag] || "impact-neutral";
 
-    const co2 = (amount * match.co2PerRM).toFixed(2);
-    const offset = donation >= 1 ? "🌿 Your donation helps offset this impact!" : "⚠️ Consider donating more to offset carbon impact.";
+    const co2 = match.co2Estimate.toFixed(2);
+    const offset = donation > 0 ? `✅ You offset approx. ${(donation * 2).toFixed(2)} kg CO₂ with RM ${donation.toFixed(2)}.` : "⚠️ No offset selected.";
 
     document.getElementById("resultMerchant").textContent = merchantInput;
     document.getElementById("resultCategory").textContent = match.category;
