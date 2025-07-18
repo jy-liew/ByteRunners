@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Awareness Simulator | SafeTap</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #1d3557, #457b9d);
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      padding: 2rem;
+    }
+    .card-quiz {
+      background: #f8f9fa;
+      color: #1d3557;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+    .btn-answer {
+      margin: 0.5rem 0;
+      width: 100%;
+      border-radius: 10px;
+    }
+    #resultBox {
+      background-color: #e9f5f2;
+      border-left: 6px solid #2a9d8f;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+    }
+    .badge-score {
+      font-size: 1.2rem;
+      background-color: #2a9d8f;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-quiz">
+    <h2 class="text-center mb-4">🛡️ Security Awareness Challenge</h2>
+    <div id="quizBox">
+      <h5 id="questionText">Loading question...</h5>
+      <div id="answerButtons" class="mt-3"></div>
+    </div>
+    <div id="resultBox" class="d-none">
+      <h4>🎉 Quiz Complete!</h4>
+      <p>Your awareness score is:</p>
+      <span class="badge-score" id="finalScore">0/0</span>
+      <p class="mt-3">Thank you for being cyber-aware! 🌐</p>
+      <button class="btn btn-primary mt-3" onclick="location.href='index.html'">Return to Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "You receive an email saying your bank account is locked. It asks you to click a link to verify. What do you do?",
+        options: ["Click it immediately", "Check sender email and contact the bank directly", "Forward to friends", "Ignore"],
+        correct: 1
+      },
+      {
+        question: "You’re shopping online. Which URL is safer?",
+        options: ["http://cheapstuff.com", "https://yourbank.fake.net", "https://shop.example.com", "ftp://store.sale.org"],
+        correct: 2
+      },
+      {
+        question: "What’s a strong password example?",
+        options: ["12345678", "password2024", "MyDog$Eats!Ice9", "qwerty"],
+        correct: 2
+      },
+      {
+        question: "Which of the following is a phishing indicator?",
+        options: ["Personalized greeting", "Urgent threat + strange URL", "Secure company domain", "No grammar mistakes"],
+        correct: 1
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = quizData[currentQ];
+      document.getElementById("questionText").innerText = `Q${currentQ + 1}: ${q.question}`;
+      const answerBox = document.getElementById("answerButtons");
+      answerBox.innerHTML = "";
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-outline-primary btn-answer";
+        btn.innerText = opt;
+        btn.onclick = () => handleAnswer(index);
+        answerBox.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selected) {
+      if (selected === quizData[currentQ].correct) score++;
+      currentQ++;
+      if (currentQ < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("quizBox").classList.add("d-none");
+      document.getElementById("resultBox").classList.remove("d-none");
+      document.getElementById("finalScore").innerText = `${score} / ${quizData.length}`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
