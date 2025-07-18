@@ -79,11 +79,11 @@
       <label>User ID</label>
       <input type="text" class="form-control mb-3" id="user_id" value="user_1" required>
       <label>Device ID</label>
-      <input type="text" class="form-control mb-3" id="device_id" value="device_1" required>
+      <input type="text" class="form-control mb-3" id="device_id" value="phone_1" required>
       <label>Amount (RM)</label>
       <input type="number" class="form-control mb-3" id="amount" value="100" required>
       <label>Time of Day</label>
-      <input type="time" class="form-control mb-3" id="time_of_day" value="12:00" required>
+      <input type="time" class="form-control mb-3" id="time_of_day" value="10:00" required>
       <label>Merchant</label>
       <input type="text" class="form-control mb-3" id="merchant" value="Zalora" required>
       <button type="submit" class="btn btn-primary w-100">Run Simulation</button>
@@ -186,8 +186,8 @@
 
       finalRisk = result.risk_score.toUpperCase();
       const esg = esgMap[merchant] || { tag: "Unknown", score: 1 };
-      if (finalRisk === "LOW" && esg.score >= 2) finalRisk = "MEDIUM";
-      if (finalRisk === "MEDIUM" && esg.score >= 2) finalRisk = "HIGH";
+      //if (finalRisk === "LOW" && esg.score >= 2) finalRisk = "MEDIUM";
+      //if (finalRisk === "MEDIUM" && esg.score >= 2) finalRisk = "HIGH";
       showOTP = (finalRisk === "HIGH" || finalRisk === "MEDIUM");
 
       const co2 = (esg.score * amount * 0.1).toFixed(2);
