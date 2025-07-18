@@ -63,6 +63,11 @@
     .form-range::-moz-range-thumb {
       background: #2a9d8f;
     }
+
+    .badge-img {
+      width: 60px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 
@@ -74,11 +79,11 @@
       <label>User ID</label>
       <input type="text" class="form-control mb-3" id="user_id" value="user_1" required>
       <label>Device ID</label>
-      <input type="text" class="form-control mb-3" id="device_id" value="phone_1" required>
+      <input type="text" class="form-control mb-3" id="device_id" value="device_1" required>
       <label>Amount (RM)</label>
       <input type="number" class="form-control mb-3" id="amount" value="100" required>
       <label>Time of Day</label>
-      <input type="time" class="form-control mb-3" id="time_of_day" value="10:00" required>
+      <input type="time" class="form-control mb-3" id="time_of_day" value="12:00" required>
       <label>Merchant</label>
       <input type="text" class="form-control mb-3" id="merchant" value="Zalora" required>
       <button type="submit" class="btn btn-primary w-100">Run Simulation</button>
@@ -114,11 +119,10 @@
 
     <div id="badgeBox" class="text-center d-none">
       <p class="mt-3">🏅 ESG Badge Unlocked:</p>
-      <img src="assets/img/badges/badge_green.png" alt="Badge" id="badgeImage">
+      <img src="assets/img/badge_green.png" alt="Badge" class="badge-img" id="badgeImage">
     </div>
   </div>
 
-  <!-- OTP Section -->
   <div id="otpSection" class="text-center bg-light p-4 d-none"
     style="border-top: 3px solid #2a9d8f; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1050;">
     <strong>🔐 Enter OTP to Confirm Payment (Use: <u>123456</u>)</strong><br />
@@ -128,7 +132,6 @@
     <button class="btn btn-primary" onclick="verifyOTP()">Verify & Proceed</button>
   </div>
 
-  <!-- Receipt Modal -->
   <div class="modal fade" id="receiptModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content text-center">
@@ -147,7 +150,6 @@
     </div>
   </div>
 
-  <!-- Confetti JS -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const esgMap = {
@@ -184,8 +186,8 @@
 
       finalRisk = result.risk_score.toUpperCase();
       const esg = esgMap[merchant] || { tag: "Unknown", score: 1 };
-      //if (finalRisk === "LOW" && esg.score >= 2) finalRisk = "MEDIUM";
-      //if (finalRisk === "MEDIUM" && esg.score >= 2) finalRisk = "HIGH";
+      if (finalRisk === "LOW" && esg.score >= 2) finalRisk = "MEDIUM";
+      if (finalRisk === "MEDIUM" && esg.score >= 2) finalRisk = "HIGH";
       showOTP = (finalRisk === "HIGH" || finalRisk === "MEDIUM");
 
       const co2 = (esg.score * amount * 0.1).toFixed(2);
@@ -205,8 +207,12 @@
     document.getElementById("confirmDonationBtn").addEventListener("click", () => {
       document.getElementById("finalSection").classList.remove("d-none");
       document.getElementById("total_paid").textContent = (transactionAmount + donationAmount).toFixed(2);
+
       const tag = document.getElementById("esg_tag").textContent;
-      if (donationAmount > 0 && (tag === "Low Impact" || tag === "Positive Impact")) {
+      if (donationAmount > 0) {
+        localStorage.setItem("donation_total", (parseFloat(localStorage.getItem("donation_total") || "0") + donationAmount).toFixed(2));
+        if (tag === "Positive Impact") localStorage.setItem("badge_green", true);
+        if (tag === "Low Impact") localStorage.setItem("badge_eco", true);
         document.getElementById("badgeBox").classList.remove("d-none");
       }
     });
