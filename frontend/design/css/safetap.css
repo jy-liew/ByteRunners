@@ -1,4 +1,4 @@
-/* safetap.css - Modern Volt-Inspired UI Styling */
+/* safetap.css - Updated Volt-Inspired UI Styling */
 
 body {
   background: #f8f9fc;
@@ -111,10 +111,22 @@ body {
   color: #1d3557;
 }
 
-.navbar img {
-  width: 32px;
-  height: 32px;
+.profile-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-box img {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  border: 2px solid #1d3557;
+}
+
+.profile-box span {
+  font-weight: 500;
+  color: #1d3557;
 }
 
 /* === CARDS === */
