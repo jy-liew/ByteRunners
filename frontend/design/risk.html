@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Evaluate Risk + ESG | SafeTap</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/safetap.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -62,20 +63,39 @@
       font-weight: 600;
     }
 
-    .high { background-color: #e63946; color: #fff; }
-    .medium { background-color: #f4a261; color: #000; }
-    .low { background-color: #2a9d8f; color: #fff; }
+    .high {
+      background-color: #e63946;
+      color: #fff;
+    }
+
+    .medium {
+      background-color: #f4a261;
+      color: #000;
+    }
+
+    .low {
+      background-color: #2a9d8f;
+      color: #fff;
+    }
 
     .fade-in {
       animation: fadeIn 0.6s ease-in-out;
     }
 
     @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="card-form">
     <h2 class="mb-4 text-center">🔐 Simulate Transaction</h2>
@@ -90,11 +110,11 @@
       </div>
       <div class="mb-3">
         <label for="amount" class="form-label">Amount (RM)</label>
-        <input type="number" step="0.01" class="form-control" id="amount" value="1050" required />
+        <input type="number" step="0.01" class="form-control" id="amount" value="100" required />
       </div>
       <div class="mb-3">
         <label for="time_of_day" class="form-label">Time (HH:MM)</label>
-        <input type="time" class="form-control" id="time_of_day" value="01:30" required />
+        <input type="time" class="form-control" id="time_of_day" value="11:30" required />
       </div>
       <div class="mb-3">
         <label for="merchant" class="form-label">Merchant</label>
@@ -108,7 +128,7 @@
     <div id="resultBox" class="alert alert-result d-none fade-in mt-4">
       <h5 class="fw-bold">🔎 Result</h5>
       <p><strong>Risk Score:</strong> <span id="risk_score" class="badge-risk"></span></p>
-      <p><strong>Step-Up Required:</strong> <span id="step_up"></span></p>
+      <p><strong>Step-Up Authentication Required:</strong> <span id="step_up"></span></p>
       <hr />
       <p><strong>ESG Tag:</strong> <span id="esg_tag"></span></p>
     </div>
@@ -168,4 +188,5 @@
     });
   </script>
 </body>
+
 </html>

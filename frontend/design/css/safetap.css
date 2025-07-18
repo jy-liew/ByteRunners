@@ -153,14 +153,18 @@ body {
 }
 
 /* === FORMS === */
-input, textarea, select {
+input,
+textarea,
+select {
   border-radius: 8px;
   border: 1px solid #ced4da;
   padding: 0.6rem 0.8rem;
   transition: border-color 0.3s ease-in-out;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   border-color: #0077b6;
   box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
   outline: none;
@@ -177,7 +181,6 @@ input:focus, textarea:focus, select:focus {
 }
 
 #risk_score {
-  color: #e63946;
   font-weight: bold;
 }
 
