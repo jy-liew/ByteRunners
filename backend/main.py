@@ -54,13 +54,28 @@ def calculate_risk_score(user_id, device_id, amount, time_of_day):
 
     return score, step_up
 
-# API route
+transactions = []
+
+# API route to evaluate a transaction
 @app.post("/transaction", response_model=RiskScoreResponse)
 def evaluate_transaction(tx: TransactionRequest):
     score, step_up = calculate_risk_score(
         tx.user_id, tx.device_id, tx.amount, tx.time_of_day
     )
+    # Save transaction details
+    transactions.append({
+        "user": tx.user_id,
+        "device": tx.device_id,
+        "amount": tx.amount,
+        "time": tx.time_of_day,
+        "risk": score
+    })
     return {
         "risk_score": score,
         "step_up_required": step_up
     }
+
+# API route to get all transactions
+@app.get("/transactions")
+def get_transactions():
+    return transactions

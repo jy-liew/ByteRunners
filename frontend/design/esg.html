@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ESG Insights | SafeTap</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/safetap.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -15,6 +16,7 @@
       padding-top: 60px;
       color: #ffffff;
     }
+
     .card-esg {
       background: #ffffff;
       color: #1d3557;
@@ -24,6 +26,7 @@
       max-width: 700px;
       margin: auto;
     }
+
     .btn-esg {
       background: #2a9d8f;
       color: #fff;
@@ -32,20 +35,43 @@
       font-weight: 600;
       padding: 0.6rem 1.2rem;
     }
+
     .btn-esg:hover {
       background: #21867a;
     }
+
     .badge-esg {
       padding: 0.4rem 0.9rem;
       border-radius: 12px;
       font-weight: 600;
       font-size: 0.95rem;
     }
-    .impact-positive { background-color: #2a9d8f; color: #fff; }
-    .impact-low { background-color: #8ecae6; color: #000; }
-    .impact-medium { background-color: #ffb703; color: #000; }
-    .impact-high { background-color: #e63946; color: #fff; }
-    .impact-neutral { background-color: #adb5bd; color: #000; }
+
+    .impact-positive {
+      background-color: #2a9d8f;
+      color: #fff;
+    }
+
+    .impact-low {
+      background-color: #8ecae6;
+      color: #000;
+    }
+
+    .impact-medium {
+      background-color: #ffb703;
+      color: #000;
+    }
+
+    .impact-high {
+      background-color: #e63946;
+      color: #fff;
+    }
+
+    .impact-neutral {
+      background-color: #adb5bd;
+      color: #000;
+    }
+
     .feedback-box {
       background: #f1faee;
       border-left: 6px solid #2a9d8f;
@@ -54,88 +80,95 @@
       margin-top: 1rem;
       font-size: 0.95rem;
     }
+
     #donationValue {
       font-weight: bold;
       color: #1d3557;
     }
   </style>
 </head>
+
 <body>
 
-<div class="card-esg">
-  <h2 class="mb-4 text-center">🌿 ESG Impact Analyzer</h2>
-  <form id="esgForm">
-    <div class="mb-3">
-      <label for="merchant" class="form-label">Merchant Name</label>
-      <input type="text" class="form-control" id="merchant" placeholder="e.g., Grab, Shopee, Uniqlo" required />
-    </div>
+  <div class="card-esg">
+    <h2 class="mb-4 text-center">🌿 ESG Impact Analyzer</h2>
+    <form id="esgForm">
+      <div class="mb-3">
+        <label for="merchant" class="form-label">Merchant Name</label>
+        <input type="text" class="form-control" id="merchant" placeholder="e.g., Grab, Shopee, Uniqlo" required />
+      </div>
 
-    <div class="mb-3">
-      <label for="donation" class="form-label">Offset Donation (RM)</label>
-      <input type="range" class="form-range" min="0" max="5" step="0.5" id="donationSlider" />
-      <span>💸 Donation Selected: RM <span id="donationValue">0.00</span></span>
-    </div>
+      <div class="mb-3">
+        <label for="donation" class="form-label">Offset Donation (RM)</label>
+        <input type="range" class="form-range" min="0" max="5" step="0.5" id="donationSlider" />
+        <span>💸 Donation Selected: RM <span id="donationValue">0.00</span></span>
+      </div>
 
-    <div class="d-grid">
-      <button type="submit" class="btn btn-esg">Analyze Impact</button>
-    </div>
-  </form>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-esg">Analyze Impact</button>
+      </div>
+      <div class="d-grid">
+        <button type="button" class="btn btn-secondary" onclick="location.href='index.html'"
+          style="margin-top: 20px;">Home</button>
+      </div>
+    </form>
 
-  <div id="esgResult" class="feedback-box d-none mt-4">
-    <h5>🧾 Merchant ESG Summary:</h5>
-    <p><strong>Merchant:</strong> <span id="resultMerchant"></span></p>
-    <p><strong>Category:</strong> <span id="resultCategory"></span></p>
-    <p><strong>ESG Tag:</strong> <span id="resultTag" class="badge-esg"></span></p>
-    <p><strong>Estimated CO₂ Emission:</strong> <span id="co2Emission"></span> kg</p>
-    <p id="resultMessage" class="mt-3"></p>
+    <div id="esgResult" class="feedback-box d-none mt-4">
+      <h5>🧾 Merchant ESG Summary:</h5>
+      <p><strong>Merchant:</strong> <span id="resultMerchant"></span></p>
+      <p><strong>Category:</strong> <span id="resultCategory"></span></p>
+      <p><strong>ESG Tag:</strong> <span id="resultTag" class="badge-esg"></span></p>
+      <p><strong>Estimated CO₂ Emission:</strong> <span id="co2Emission"></span> kg</p>
+      <p id="resultMessage" class="mt-3"></p>
+    </div>
   </div>
-</div>
 
-<script>
-  const categoryMap = {
-    "grab": { category: "Mobility", tag: "Low Impact", co2Estimate: 1.2 },
-    "shopee": { category: "E-Commerce", tag: "Medium Impact", co2Estimate: 2.0 },
-    "uniqlo": { category: "Fashion", tag: "Fast Fashion – High Impact", co2Estimate: 3.5 },
-    "tng": { category: "Fintech", tag: "Low Impact", co2Estimate: 0.8 },
-    "solarco": { category: "Energy", tag: "Positive Impact", co2Estimate: 0.2 }
-  };
+  <script>
+    const categoryMap = {
+      "grab": { category: "Mobility", tag: "Low Impact", co2Estimate: 1.2 },
+      "shopee": { category: "E-Commerce", tag: "Medium Impact", co2Estimate: 2.0 },
+      "uniqlo": { category: "Fashion", tag: "Fast Fashion – High Impact", co2Estimate: 3.5 },
+      "tng": { category: "Fintech", tag: "Low Impact", co2Estimate: 0.8 },
+      "solarco": { category: "Energy", tag: "Positive Impact", co2Estimate: 0.2 }
+    };
 
-  const tagStyles = {
-    "Positive Impact": "impact-positive",
-    "Low Impact": "impact-low",
-    "Neutral": "impact-neutral",
-    "Medium Impact": "impact-medium",
-    "Fast Fashion – High Impact": "impact-high",
-    "High Impact": "impact-high"
-  };
+    const tagStyles = {
+      "Positive Impact": "impact-positive",
+      "Low Impact": "impact-low",
+      "Neutral": "impact-neutral",
+      "Medium Impact": "impact-medium",
+      "Fast Fashion – High Impact": "impact-high",
+      "High Impact": "impact-high"
+    };
 
-  document.getElementById("donationSlider").addEventListener("input", function () {
-    document.getElementById("donationValue").textContent = this.value;
-  });
+    document.getElementById("donationSlider").addEventListener("input", function () {
+      document.getElementById("donationValue").textContent = this.value;
+    });
 
-  document.getElementById("esgForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+    document.getElementById("esgForm").addEventListener("submit", function (e) {
+      e.preventDefault();
 
-    const merchantInput = document.getElementById("merchant").value.trim().toLowerCase();
-    const donation = parseFloat(document.getElementById("donationSlider").value);
+      const merchantInput = document.getElementById("merchant").value.trim().toLowerCase();
+      const donation = parseFloat(document.getElementById("donationSlider").value);
 
-    const match = categoryMap[merchantInput] || { category: "Unknown", tag: "Neutral", co2Estimate: 1.5 };
-    const tagClass = tagStyles[match.tag] || "impact-neutral";
+      const match = categoryMap[merchantInput] || { category: "Unknown", tag: "Neutral", co2Estimate: 1.5 };
+      const tagClass = tagStyles[match.tag] || "impact-neutral";
 
-    const co2 = match.co2Estimate.toFixed(2);
-    const offset = donation > 0 ? `✅ You offset approx. ${(donation * 2).toFixed(2)} kg CO₂ with RM ${donation.toFixed(2)}.` : "⚠️ No offset selected.";
+      const co2 = match.co2Estimate.toFixed(2);
+      const offset = donation > 0 ? `✅ You offset approx. ${(donation * 2).toFixed(2)} kg CO₂ with RM ${donation.toFixed(2)}.` : "⚠️ No offset selected.";
 
-    document.getElementById("resultMerchant").textContent = merchantInput;
-    document.getElementById("resultCategory").textContent = match.category;
-    const tagEl = document.getElementById("resultTag");
-    tagEl.textContent = match.tag;
-    tagEl.className = "badge-esg " + tagClass;
+      document.getElementById("resultMerchant").textContent = merchantInput;
+      document.getElementById("resultCategory").textContent = match.category;
+      const tagEl = document.getElementById("resultTag");
+      tagEl.textContent = match.tag;
+      tagEl.className = "badge-esg " + tagClass;
 
-    document.getElementById("co2Emission").textContent = co2;
-    document.getElementById("resultMessage").textContent = offset;
-    document.getElementById("esgResult").classList.remove("d-none");
-  });
-</script>
+      document.getElementById("co2Emission").textContent = co2;
+      document.getElementById("resultMessage").textContent = offset;
+      document.getElementById("esgResult").classList.remove("d-none");
+    });
+  </script>
 
 </body>
+
 </html>
